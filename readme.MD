@@ -1,11 +1,9 @@
 
 # Personal Price Tracker BOT
 
-I've created this basic bot to track prices from Amazon.it
+This version of the price traker works with the AMAZON PRODUCT ADVERTISING API 5.0
 
-It will track the items that you will request and it will advice you when the price drop under your target price. 
-
-at the moment it is a very basic bot, doesn't have a database and have a scheduler that run every 3600 seconds, so when restarted it will delete all the items in your list. 
+At the moment is still WIP and doesn't work.
 
 ## USAGE
 
@@ -14,6 +12,14 @@ at the moment it is a very basic bot, doesn't have a database and have a schedul
 Create your bot with bot_father on Telegram, when it generate the BOT_TOKEN paste it in config.py
 ```
   BOT_TOKEN = 'ADD_YOUR_TOKEN'
+  ACCESS_KEY = 'ADD_YOUR_ACCESS_KEY'
+  SECRET_KEY = 'ADD_YOUR_SECRET_KEY'
+  PARTNER_ID = 'ADD_YOUR_AFFILIATE_ID'
+  
+  #FOR HOST AND REGION https://webservices.amazon.com/paapi5/documentation/common-request-parameters.html#host-and-region
+  
+  HOST = "ADD_YOUR_HOST"
+  REGION = "ADD_YOUR_REGION"
 ```
 
 ### TELEGRAM USAGE
@@ -22,8 +28,8 @@ BOT COMMANDS:
 
 ```
   /start (start the bot) DONE
-  /add (add a new item to track) DONE
-  /list (it return the list of item on track) DONE
+  /add (add a new item to track) WIP
+  /list (it return the list of item on track) WIP
   /remove (remove an item from the list) WIP
 ```
 ## NEXT IMPLEMENTATIONS
@@ -31,9 +37,8 @@ BOT COMMANDS:
 
 ### Roadmap
 
-- Add a database 
-
-
+- COMPLETE get_item_api.py 
+- COMPLETE get_variation_api.py
 
 ## Authors
 
