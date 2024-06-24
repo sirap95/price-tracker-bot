@@ -3,11 +3,9 @@
 
 I've created this basic bot to track prices from Amazon.it
 
-it is a very basic bot, doesn't have a database, so when restarted it will delete all the items in your list. 
+It will track the items that you will request and it will advice you when the price drop under your target price. 
 
-
-
-
+at the moment it is a very basic bot, doesn't have a database, so when restarted it will delete all the items in your list. 
 
 ## USAGE
 
@@ -31,7 +29,7 @@ BOT COMMANDS:
 ## NEXT IMPLEMENTATIONS
 
 
-## Roadmap
+### Roadmap
 
 - Add a database 
 
