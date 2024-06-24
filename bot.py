@@ -35,7 +35,7 @@ def main():
 
     # Initialize the APScheduler
     scheduler = AsyncIOScheduler()
-    scheduler.add_job(periodic_price_check, trigger=IntervalTrigger(seconds=60), id='price_check_job')  # Check every 60 seconds
+    scheduler.add_job(periodic_price_check, trigger=IntervalTrigger(seconds=3600), id='price_check_job')  # Check every 60 seconds
     scheduler.start()
 
     try:
