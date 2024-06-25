@@ -1,9 +1,12 @@
 import requests
 from bs4 import BeautifulSoup
+import re
+
+headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+                  "Chrome/58.0.3029.110 Safari/537.3"}
+
 def fetch_price(url):
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
-                      "Chrome/58.0.3029.110 Safari/537.3"}
     response = requests.get(url, headers=headers)
     soup = BeautifulSoup(response.content, 'html.parser')
 
@@ -28,18 +31,39 @@ def fetch_price(url):
         print(f"Error fetching price: {e}")
         return None
 
+
 def fetch_object_name(url):
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
-                      "Chrome/58.0.3029.110 Safari/537.3"}
     response = requests.get(url, headers=headers)
     soup = BeautifulSoup(response.content, 'html.parser')
     try:
         # Extract the first 20 chars of the title
         object_name = soup.find(id="productTitle").get_text().strip()
-        object_name =  object_name[:20]
+        object_name = object_name[:20]
 
         return object_name
     except Exception as e:
         print(f"Error fetching price: {e}")
+        return None
+
+
+def fetch_asin(url):
+    try:
+        response = requests.get(url, headers=headers, allow_redirects=True)
+
+        # Get the final URL after redirects
+        final_url = response.url
+        print(f"Final URL after redirects: {final_url}")
+
+        asin_match = re.search(r'/dp/([A-Z0-9]{10})', final_url)
+
+        if asin_match:
+            asin = asin_match.group(1)
+            print(f'Extracted ASIN: {asin}')
+            return asin
+        else:
+            print('ASIN not found in the URL.')
+            return None
+
+    except Exception as e:
+        print(f"Error fetching ASIN: {e}")
         return None

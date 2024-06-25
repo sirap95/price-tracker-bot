@@ -19,16 +19,11 @@ def parse_response(item_response_list):
 
 
 def get_items():
-
     access_key = ACCESS_KEY
-
     secret_key = SECRET_KEY
-
     partner_tag = PARTNER_ID
-
     host = HOST
     region = REGION
-
     """ API declaration """
     default_api = DefaultApi(
         access_key=access_key, secret_key=secret_key, host=host, region=region
@@ -52,7 +47,7 @@ def get_items():
         get_items_request = GetItemsRequest(
             partner_tag=partner_tag,
             partner_type=PartnerType.ASSOCIATES,
-            marketplace="www.amazon.com",
+            marketplace="www.amazon.it",
             condition=Condition.NEW,
             item_ids=item_ids,
             resources=get_items_resource,

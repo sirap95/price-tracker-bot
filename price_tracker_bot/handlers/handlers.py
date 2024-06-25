@@ -1,8 +1,9 @@
 from telegram import Update, Bot
 from telegram.ext import ContextTypes, ConversationHandler
 
-from config import BOT_TOKEN
-from price_fetcher import fetch_price, fetch_object_name
+from price_tracker_bot.api.get_variation_api import get_variations
+from price_tracker_bot.config import BOT_TOKEN
+from price_tracker_bot.core.price_fetcher import fetch_price, fetch_object_name
 import logging
 
 # States for the conversation
@@ -17,12 +18,14 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+
 # Define your async functions for the conversation
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     logger.info("Entered start function.")
     await update.message.reply_text("Welcome! Use /add to start tracking a product.")
     return ConversationHandler.END
+
 
 async def add(update: Update, context: ContextTypes.DEFAULT_TYPE):
     logger.info("Entered add function. Asking for URL.")
@@ -31,19 +34,26 @@ async def add(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     return URL  # Proceed to the URL state
 
+
 async def get_url(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         url = update.message.text
         logger.info(f"Received URL: {url}")
+
+        # Store the URL in user data for later use
         context.user_data['url'] = url
-        context.user_data['object_name'] = 'Sony zv1' #todo: remove constant
+
+        variation_data = get_variations(url)
+
+        # You can use variation_data as needed, for now we just log it
+        logger.info(f"Variation Data: {variation_data}")
+
         await update.message.reply_text("Got it! Now send me the target price you want to track.")
         return PRICE  # Proceed to the PRICE state
     except Exception as e:
         logger.error(f"Error in get_url: {e}")
         await update.message.reply_text("There was an error processing the URL. Please try again.")
         return ConversationHandler.END
-
 
 async def get_price_old(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
@@ -56,6 +66,7 @@ async def get_price_old(update: Update, context: ContextTypes.DEFAULT_TYPE):
         logger.error("Invalid price format.")
         await update.message.reply_text("Please enter a valid number for the price.")
         return PRICE
+
 
 async def get_price(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:

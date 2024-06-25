@@ -1,19 +1,15 @@
 from paapi5_python_sdk.api.default_api import DefaultApi
-from paapi5_python_sdk.models.get_variations_request import GetVariationsRequest
-from paapi5_python_sdk.models.get_variations_resource import GetVariationsResource
 from paapi5_python_sdk.models.partner_type import PartnerType
+from paapi5_python_sdk.models.search_items_request import SearchItemsRequest
+from paapi5_python_sdk.models.search_items_resource import SearchItemsResource
 from paapi5_python_sdk.rest import ApiException
 from ..config import SECRET_KEY, ACCESS_KEY, PARTNER_ID, HOST, REGION
 
-def get_variations():
+def search_items():
     access_key = ACCESS_KEY
-
     secret_key = SECRET_KEY
-
     partner_tag = PARTNER_ID
-
     host = HOST
-
     region = REGION
 
     """ API declaration """
@@ -23,57 +19,48 @@ def get_variations():
 
     """ Request initialization"""
 
-    """ Specify ASIN """
-    asin = "B07H65KP63"
+    """ Specify keywords """
+    keywords = "Harry Potter"
 
-    """ Specify language of preference """
-    """ For more details, refer https://webservices.amazon.com/paapi5/documentation/locale-reference.html"""
-    languages_of_preference = ["es_US"]
+    """ Specify the category in which search request is to be made """
+    """ For more details, refer: https://webservices.amazon.com/paapi5/documentation/use-cases/organization-of-items-on-amazon/search-index.html """
+    search_index = "All"
 
-    """ Choose resources you want from GetVariationsResource enum """
-    """ For more details, refer: https://webservices.amazon.com/paapi5/documentation/get-variations.html#resources-parameter """
-    get_variations_resources = [
-        GetVariationsResource.ITEMINFO_TITLE,
-        GetVariationsResource.OFFERS_LISTINGS_PRICE,
-        GetVariationsResource.VARIATIONSUMMARY_VARIATIONDIMENSION,
+    """ Specify item count to be returned in search result """
+    item_count = 1
+
+    """ Choose resources you want from SearchItemsResource enum """
+    """ For more details, refer: https://webservices.amazon.com/paapi5/documentation/search-items.html#resources-parameter """
+    search_items_resource = [
+        SearchItemsResource.ITEMINFO_TITLE,
+        SearchItemsResource.OFFERS_LISTINGS_PRICE,
     ]
 
     """ Forming request """
     try:
-        get_variations_request = GetVariationsRequest(
+        search_items_request = SearchItemsRequest(
             partner_tag=partner_tag,
             partner_type=PartnerType.ASSOCIATES,
-            marketplace="www.amazon.com",
-            languages_of_preference=languages_of_preference,
-            asin=asin,
-            resources=get_variations_resources,
+            keywords=keywords,
+            search_index=search_index,
+            item_count=item_count,
+            resources=search_items_resource,
         )
     except ValueError as exception:
-        print("Error in forming GetVariationsRequest: ", exception)
+        print("Error in forming SearchItemsRequest: ", exception)
         return
 
     try:
         """ Sending request """
-        response = default_api.get_variations(get_variations_request)
+        response = default_api.search_items(search_items_request)
 
         print("API called Successfully")
         print("Complete Response:", response)
 
         """ Parse response """
-        if response.variations_result is not None:
-            print("Printing VariationSummary:")
-            if (
-                    response.variations_result.variation_summary is not None
-                    and response.variations_result.variation_summary.variation_count
-                    is not None
-            ):
-                print(
-                    "VariationCount: ",
-                    response.variations_result.variation_summary.variation_count,
-                )
-
-            print("Printing first item information in VariationsResult:")
-            item_0 = response.variations_result.items[0]
+        if response.search_result is not None:
+            print("Printing first item information in SearchResult:")
+            item_0 = response.search_result.items[0]
             if item_0 is not None:
                 if item_0.asin is not None:
                     print("ASIN: ", item_0.asin)
@@ -115,7 +102,7 @@ def get_variations():
         print("Exception :", exception)
 
 
-def get_variations_with_http_info():
+def search_items_with_http_info():
     """ Following are your credentials """
     """ Please add your access key here """
     access_key = "<YOUR ACCESS KEY>"
@@ -138,39 +125,41 @@ def get_variations_with_http_info():
 
     """ Request initialization"""
 
-    """ Specify ASIN """
-    asin = "B07H65KP63"
+    """ Specify keywords """
+    keywords = "Harry Potter"
 
-    """ Specify language of preference """
-    """ For more details, refer https://webservices.amazon.com/paapi5/documentation/locale-reference.html"""
-    languages_of_preference = ["es_US"]
+    """ Specify the category in which search request is to be made """
+    """ For more details, refer: https://webservices.amazon.com/paapi5/documentation/use-cases/organization-of-items-on-amazon/search-index.html """
+    search_index = "All"
 
-    """ Choose resources you want from GetVariationsResource enum """
-    """ For more details, refer: https://webservices.amazon.com/paapi5/documentation/get-variations.html#resources-parameter """
-    get_variations_resources = [
-        GetVariationsResource.ITEMINFO_TITLE,
-        GetVariationsResource.OFFERS_LISTINGS_PRICE,
-        GetVariationsResource.VARIATIONSUMMARY_VARIATIONDIMENSION,
+    """ Specify item count to be returned in search result """
+    item_count = 1
+
+    """ Choose resources you want from SearchItemsResource enum """
+    """ For more details, refer: https://webservices.amazon.com/paapi5/documentation/search-items.html#resources-parameter """
+    search_items_resource = [
+        SearchItemsResource.ITEMINFO_TITLE,
+        SearchItemsResource.OFFERS_LISTINGS_PRICE,
     ]
 
     """ Forming request """
     try:
-        get_variations_request = GetVariationsRequest(
+        search_items_request = SearchItemsRequest(
             partner_tag=partner_tag,
             partner_type=PartnerType.ASSOCIATES,
-            marketplace="www.amazon.com",
-            languages_of_preference=languages_of_preference,
-            asin=asin,
-            resources=get_variations_resources,
+            keywords=keywords,
+            search_index=search_index,
+            item_count=item_count,
+            resources=search_items_resource,
         )
     except ValueError as exception:
-        print("Error in forming GetVariationsRequest: ", exception)
+        print("Error in forming SearchItemsRequest: ", exception)
         return
 
     try:
         """ Sending request """
-        response_with_http_info = default_api.get_variations_with_http_info(
-            get_variations_request
+        response_with_http_info = default_api.search_items_with_http_info(
+            search_items_request
         )
 
         """ Parse response """
@@ -180,20 +169,9 @@ def get_variations_with_http_info():
             print("HTTP Info:", response_with_http_info[2])
 
             response = response_with_http_info[0]
-            if response.variations_result is not None:
-                print("Printing VariationSummary:")
-                if (
-                        response.variations_result.variation_summary is not None
-                        and response.variations_result.variation_summary.variation_count
-                        is not None
-                ):
-                    print(
-                        "VariationCount: ",
-                        response.variations_result.variation_summary.variation_count,
-                    )
-
-                print("Printing first item information in VariationsResult:")
-                item_0 = response.variations_result.items[0]
+            if response.search_result is not None:
+                print("Printing first item information in SearchResult:")
+                item_0 = response.search_result.items[0]
                 if item_0 is not None:
                     if item_0.asin is not None:
                         print("ASIN: ", item_0.asin)
@@ -238,7 +216,7 @@ def get_variations_with_http_info():
         print("Exception :", exception)
 
 
-def get_variations_async():
+def search_items_async():
     """ Following are your credentials """
     """ Please add your access key here """
     access_key = "<YOUR ACCESS KEY>"
@@ -261,58 +239,49 @@ def get_variations_async():
 
     """ Request initialization"""
 
-    """ Specify ASIN """
-    asin = "B07H65KP63"
+    """ Specify keywords """
+    keywords = "Harry Potter"
 
-    """ Specify language of preference """
-    """ For more details, refer https://webservices.amazon.com/paapi5/documentation/locale-reference.html"""
-    languages_of_preference = ["es_US"]
+    """ Specify the category in which search request is to be made """
+    """ For more details, refer: https://webservices.amazon.com/paapi5/documentation/use-cases/organization-of-items-on-amazon/search-index.html """
+    search_index = "All"
 
-    """ Choose resources you want from GetVariationsResource enum """
-    """ For more details, refer: https://webservices.amazon.com/paapi5/documentation/get-variations.html#resources-parameter """
-    get_variations_resources = [
-        GetVariationsResource.ITEMINFO_TITLE,
-        GetVariationsResource.OFFERS_LISTINGS_PRICE,
-        GetVariationsResource.VARIATIONSUMMARY_VARIATIONDIMENSION,
+    """ Specify item count to be returned in search result """
+    item_count = 1
+
+    """ Choose resources you want from SearchItemsResource enum """
+    """ For more details, refer: https://webservices.amazon.com/paapi5/documentation/search-items.html#resources-parameter """
+    search_items_resource = [
+        SearchItemsResource.ITEMINFO_TITLE,
+        SearchItemsResource.OFFERS_LISTINGS_PRICE,
     ]
 
     """ Forming request """
     try:
-        get_variations_request = GetVariationsRequest(
+        search_items_request = SearchItemsRequest(
             partner_tag=partner_tag,
             partner_type=PartnerType.ASSOCIATES,
-            marketplace="www.amazon.com",
-            languages_of_preference=languages_of_preference,
-            asin=asin,
-            resources=get_variations_resources,
+            keywords=keywords,
+            search_index=search_index,
+            item_count=item_count,
+            resources=search_items_resource,
         )
     except ValueError as exception:
-        print("Error in forming GetVariationsRequest: ", exception)
+        print("Error in forming SearchItemsRequest: ", exception)
         return
 
     try:
         """ Sending request """
-        thread = default_api.get_variations(get_variations_request, async_req=True)
+        thread = default_api.search_items(search_items_request, async_req=True)
         response = thread.get()
 
-        """ Parse response """
         print("API called Successfully")
         print("Complete Response:", response)
 
-        if response.variations_result is not None:
-            print("Printing VariationSummary:")
-            if (
-                    response.variations_result.variation_summary is not None
-                    and response.variations_result.variation_summary.variation_count
-                    is not None
-            ):
-                print(
-                    "VariationCount: ",
-                    response.variations_result.variation_summary.variation_count,
-                )
-
-            print("Printing first item information in VariationsResult:")
-            item_0 = response.variations_result.items[0]
+        """ Parse response """
+        if response.search_result is not None:
+            print("Printing first item information in SearchResult:")
+            item_0 = response.search_result.items[0]
             if item_0 is not None:
                 if item_0.asin is not None:
                     print("ASIN: ", item_0.asin)
@@ -354,6 +323,6 @@ def get_variations_async():
         print("Exception :", exception)
 
 
-get_variations()
-# get_variations_with_http_info()
-# get_variations_async()
+search_items()
+# search_items_with_http_info()
+# search_items_async()

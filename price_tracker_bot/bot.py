@@ -1,9 +1,11 @@
 from telegram.ext import ApplicationBuilder, CommandHandler, ConversationHandler, MessageHandler, filters
 from config import BOT_TOKEN
-from handlers import start, add, get_url, get_price, list_items, remove_item, get_item_number, cancel, URL, PRICE, REMOVE, periodic_price_check
+from price_tracker_bot.handlers.handlers import start, get_url, add, get_price, list_items, remove_item, get_item_number, \
+    cancel, URL, PRICE, REMOVE, periodic_price_check
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 import logging
+
 
 def main():
     # Enable logging
@@ -35,7 +37,8 @@ def main():
 
     # Initialize the APScheduler
     scheduler = AsyncIOScheduler()
-    scheduler.add_job(periodic_price_check, trigger=IntervalTrigger(seconds=3600), id='price_check_job')  # Check every 60 seconds
+    scheduler.add_job(periodic_price_check, trigger=IntervalTrigger(seconds=3600),
+                      id='price_check_job')  # Check every 60 seconds
     scheduler.start()
 
     try:
@@ -44,6 +47,7 @@ def main():
     except KeyboardInterrupt:
         # Stop the scheduler on keyboard interrupt
         scheduler.shutdown()
+
 
 if __name__ == '__main__':
     main()
